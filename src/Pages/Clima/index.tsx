@@ -35,7 +35,10 @@ interface Coordenadas {
     longitude: number;
 }
 
-
+interface WeatherData{
+    [main: string]:string; 
+    
+}
 
 //   console.log(weather.main.temp);
 export default function Clima() {
@@ -100,6 +103,7 @@ export default function Clima() {
     return (
         <Container>
             <Reload onPress={() => {
+                console.log('reload')
 
             }}>
                 <Icon name="refresh-cw" size={30} color="#404040" />
@@ -111,11 +115,11 @@ export default function Clima() {
             </DadosEnd>
             <TempWeather>
                 <Icon name="sun" size={60} color="#404040" />
-                <Temp></Temp>
+        <Temp>{(weather.main.temp - 273.15).toFixed(0)}°</Temp>
             </TempWeather>
             <MinMaxTemp>
-                <Min>26º<Icon name="sunrise" size={20} color="#404040" /></Min>
-                <Max>22°<Icon name="sunset" size={20} color="#404040" /></Max>
+                <Max>{(weather.main.temp_max - 273.15).toFixed(0)}°<Icon name="sunrise" size={20} color="#404040" /></Max>
+                <Min>{(weather.main.temp_min - 273.15).toFixed(0)}º<Icon name="sunset" size={20} color="#404040" /></Min>
             </MinMaxTemp>
         </Container>
     );

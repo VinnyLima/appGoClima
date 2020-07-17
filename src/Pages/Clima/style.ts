@@ -66,13 +66,14 @@ margin-top: 95px;
 export const Min = styled.Text`
   font-size:30px;
   color:#404040;
-  margin-right:30px;
+  margin-left:30px;
  
 `;
 export const Max = styled.Text`
   font-size:30px;
   color:#404040;
-  margin-left:30px;
+  margin-right:30px;
+
 
 
 `;

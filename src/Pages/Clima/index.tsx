@@ -17,36 +17,106 @@ Será muito bem valorizado:
     Interface
 
  */
-import React from 'react';
+
+import React, { useCallback, useState, useEffect } from 'react';
 import { View, StyleSheet, Text, PermissionsAndroid } from 'react-native';
+import moment from 'moment';
 import Icon from 'react-native-vector-icons/Feather';
 import { Container, Reload, Cidade, Bairro, DadosEnd, Day, TempWeather, Temp, MinMaxTemp, Min, Max } from './style';
+import Geolocation from 'react-native-geolocation-service';
+import api from '../../services/api';
+
+
+
+const apikey = 'd55143bf18a6deb7e90c8f3a26783805';
+
+interface Coordenadas {
+    latitude: number;
+    longitude: number;
+}
+
+
 
 //   console.log(weather.main.temp);
 export default function Clima() {
+    const [hasLocationPermission, setHasLocationPermission] = useState(false);
+    const [userPosition, setUserPosition] = useState<Coordenadas>(Object);
+    const [coords, setCoords] = useState({});
+    const [weather, setWeather] = useState({});
+
+    const today = moment().format('dddd');
+
+
+
+    async function verifyLocationPermission() {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('permissão concedida');
+                setHasLocationPermission(true);
+            } else {
+                console.error('permissão negada');
+                setHasLocationPermission(false);
+            }
+        } catch (err) {
+            console.warn(err);
+        }
+    }
+
+    useEffect(() => {
+        verifyLocationPermission();
+        async function handleLocation() {
+            if (hasLocationPermission) {
+                await Geolocation.getCurrentPosition(
+                    (position) => {
+                        setUserPosition({
+                            latitude: position.coords.latitude,
+                            longitude: position.coords.longitude,
+                        });
+                    },
+                    (error) => {
+                        console.log(error.code, error.message);
+                    },
+                );
+                if (userPosition.latitude != null) {
+                    await api.get(`2.5/weather?lat=${userPosition.latitude}&lon=${userPosition.longitude}&appid=${apikey}`).then((response) => {
+                        setWeather(response.data);
+
+                    })
+                }
+
+
+            }
+        }
+        handleLocation();
+    }, [hasLocationPermission]);
+
+    console.log(userPosition.latitude, userPosition.longitude);
+    console.log(weather);
+
+
     return (
         <Container>
             <Reload onPress={() => {
-                console.log('reload');
+
             }}>
                 <Icon name="refresh-cw" size={30} color="#404040" />
             </Reload>
             <DadosEnd>
-                <Cidade>Cariacica</Cidade>
+                <Cidade>{weather.name}</Cidade>
                 <Bairro>Porto Novo</Bairro>
-                <Day>Sexta-Feira</Day>
+                <Day>{today}</Day>
             </DadosEnd>
             <TempWeather>
                 <Icon name="sun" size={60} color="#404040" />
-                <Temp>25°</Temp>
+                <Temp></Temp>
             </TempWeather>
             <MinMaxTemp>
-            <Min>26º<Icon name="sunrise" size={20} color="#404040" /></Min>
-            <Max>22°<Icon name="sunset" size={20} color="#404040" /></Max>
+                <Min>26º<Icon name="sunrise" size={20} color="#404040" /></Min>
+                <Max>22°<Icon name="sunset" size={20} color="#404040" /></Max>
             </MinMaxTemp>
-            
-
-
         </Container>
     );
 }

@@ -35,17 +35,32 @@ interface Coordenadas {
     longitude: number;
 }
 
-interface WeatherData{
-    [main: string]:string; 
-    
-}
+// interface WeatherObject {
+//     description: string;
+//     icon: string;
+//     id: number;
+//     main: string;
+//   }
+  
+//   interface Response {
+//       name: string
+//     main: {
+//       feels_like: number;
+//       humidity: number;
+//       pressure: number;
+//       temp: number;
+//       temp_max: number;
+//       temp_min: number;
+//     };
+//     weather: WeatherObject[];
+//   }
 
 //   console.log(weather.main.temp);
 export default function Clima() {
     const [hasLocationPermission, setHasLocationPermission] = useState(false);
     const [userPosition, setUserPosition] = useState<Coordenadas>(Object);
     const [coords, setCoords] = useState({});
-    const [weather, setWeather] = useState({});
+    const [weather, setWeather] = useState<Response>({}as Response);
 
     const today = moment().format('dddd');
 
@@ -115,7 +130,7 @@ export default function Clima() {
             </DadosEnd>
             <TempWeather>
                 <Icon name="sun" size={60} color="#404040" />
-        <Temp>{(weather.main.temp - 273.15).toFixed(0)}°</Temp>
+                <Temp>{(weather.main.temp - 273.15).toFixed(0)}°</Temp>
             </TempWeather>
             <MinMaxTemp>
                 <Max>{(weather.main.temp_max - 273.15).toFixed(0)}°<Icon name="sunrise" size={20} color="#404040" /></Max>

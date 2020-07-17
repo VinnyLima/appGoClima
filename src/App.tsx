@@ -6,7 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 
 const App: React.FC = () => (
   <NavigationContainer>
-    <StatusBar barStyle="light-content" backgroundColor="#3399ff" />
+    <StatusBar barStyle="dark-content" backgroundColor="#ffff4d"  />
     <View style={{flex: 1, backgroundColor: '#312e38'}}>
       <Clima />
     </View>

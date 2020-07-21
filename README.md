@@ -1,7 +1,7 @@
 # App go Clima
 ### Aplicativo desenvolvido para exibir previsão metereologica
 
-<img src="assets/readme/tela1.png" height="250" width="550">
+<img src="assets/readme/tela1.png" height="550" width="250">
 
 Execute os seguintes comando para testar o app
 

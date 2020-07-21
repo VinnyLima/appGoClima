@@ -1,4 +1,4 @@
 # App go Clima
 ### Aplicativo desenvolvido para exibir previsão metereologica
 
-<![alt](assets/tela1.png)>
+<![alt](assets/readme/tela1.png)>

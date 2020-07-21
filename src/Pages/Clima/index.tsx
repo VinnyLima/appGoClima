@@ -44,7 +44,6 @@ import apiGeoc from '../../services/apiGeocodig';
 import RNRestart from 'react-native-restart';
 
 const apikey = 'd55143bf18a6deb7e90c8f3a26783805';
-const apikeyGeocoding = 'AIzaSyD_SyO_idxGehdhhaPfaMr3ByQyVflaVd0';
 
 interface Coordenadas {
   latitude: number;
@@ -70,7 +69,7 @@ interface DataGeocoding {
   };
 }
 
-Geocoder.init('AIzaSyD_SyO_idxGehdhhaPfaMr3ByQyVflaVd0');
+Geocoder.init('');
 
 //   console.log(weather.main.temp);
 export default function Clima() {

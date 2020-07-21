@@ -23,7 +23,20 @@ import {PermissionsAndroid, View, Text} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import Icon from 'react-native-vector-icons/Feather';
+import RNRestart from 'react-native-restart';
 import Geocoder from 'react-native-geocoding';
+import Geolocation from 'react-native-geolocation-service';
+
+/**Importações Locais */
+import apiGeoc from '../../services/apiGeocodig';
+import api from '../../services/api';
+
+const apikey = 'd55143bf18a6deb7e90c8f3a26783805';
+const apikeyGeocoding = 'AIzaSyD_SyO_idxGehdhhaPfaMr3ByQyVflaVd0';
+
+/**
+ * Estilização
+ */
 import {
   Container,
   Reload,
@@ -37,13 +50,7 @@ import {
   Min,
   Max,
 } from './style';
-import Geolocation from 'react-native-geolocation-service';
-import api from '../../services/api';
-import apiGeoc from '../../services/apiGeocodig';
 
-import RNRestart from 'react-native-restart';
-
-const apikey = 'd55143bf18a6deb7e90c8f3a26783805';
 
 interface Coordenadas {
   latitude: number;
@@ -69,15 +76,20 @@ interface DataGeocoding {
   };
 }
 
-Geocoder.init('');
+
 
 //   console.log(weather.main.temp);
 export default function Clima() {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [userPosition, setUserPosition] = useState<Coordenadas>(Object);
   const [verifiObject, setVerifiObject] = useState(false);
-  const [weather, setWeather] = useState<Response>({} as Response);
-  const [address, setAddress] = useState<DataGeocoding>({} as DataGeocoding);
+  const [weather, setWeather] = useState<Response>(Object);
+  const [address, setAddress] = useState<DataGeocoding>(Object);
+  const [temp, setTemp] = useState(0);
+  const [tempMin, setTempMin] = useState(0);
+  const [tempMax, setTempMax] = useState(0);
+  const [cidade, setCidade] = useState('');
+  const [bairro, setBairro] = useState('');
 
   moment.locale('pt-br');
   const today = moment().calendar();
@@ -105,7 +117,7 @@ export default function Clima() {
       if (hasLocationPermission) {
         await Geolocation.getCurrentPosition(
           (position) => {
-            console.log(position);
+           
             setUserPosition({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
@@ -123,12 +135,7 @@ export default function Clima() {
     handleLocation();
   }, [hasLocationPermission]);
 
-  // Geocoder.from(userPosition.latitude, userPosition.longitude)
-  //   .then((json) => {
-  //     var addressComponent = json.results[0].address_components[0];
-  //     console.log(addressComponent);
-  //   })
-  //   .catch((error) => console.warn(error));
+ 
 
   useEffect(() => {
     try {
@@ -137,9 +144,11 @@ export default function Clima() {
           var response = await api.get(
             `2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apikey}`,
           );
-          if (response.data) {
+          if (response.data) {                      
             setVerifiObject(true);
-            setWeather(response.data);
+            setTemp(response.data.main.temp);
+            setTempMax(response.data.main.temp_max)
+            setTempMin(response.data.main.temp_min)
           }
         }
         handleWealther(userPosition.latitude, userPosition.longitude);
@@ -147,7 +156,11 @@ export default function Clima() {
         async function handleAndress(latitude: number, longitude: number) {
           var response = await apiGeoc.get(`/json?latlng=${latitude},${longitude}&key=${apikeyGeocoding}
             `);
-          setAddress(response.data);
+            
+            setBairro(response.data.results[0].address_components[2].long_name);
+            setCidade(response.data.results[0].address_components[3].long_name)
+            
+          //setAddress(response.data.results);
         }
         handleAndress(userPosition.latitude, userPosition.longitude);
       }
@@ -156,8 +169,7 @@ export default function Clima() {
     }
   }, [userPosition.latitude, userPosition.longitude]);
 
-  console.log(verifiObject);
-  //console.log(address.plus_code.compound_code);
+  
 
   if (verifiObject === false) {
     return (
@@ -177,22 +189,22 @@ export default function Clima() {
           <Icon name="refresh-cw" size={30} color="#404040" />
         </Reload>
         <DadosEnd>
-          <Cidade>Cariacica</Cidade>
-          <Bairro>Porto Novo</Bairro>
+        <Cidade>{cidade}</Cidade>
+        <Bairro>{bairro}</Bairro>
           <Day>{today}</Day>
         </DadosEnd>
         <TempWeather>
           <Icon name="sun" size={60} color="#404040" />
-          <Temp>{(298 - 273.15).toFixed(0)}°</Temp>
+          <Temp>{(temp - 273.15).toFixed(0)}°</Temp>
         </TempWeather>
         <MinMaxTemp>
           <Max>
-            {(285 - 273.15).toFixed(0)}°
+            {(tempMax - 273.15).toFixed(0)}°
             <Icon name="sunrise" size={20} color="#404040" />
           </Max>
 
           <Min>
-            {(282 - 273.15).toFixed(0)}°
+            {(tempMin - 273.15).toFixed(0)}°
             <Icon name="sunset" size={20} color="#404040" />
           </Min>
         </MinMaxTemp>

@@ -1,5 +1,8 @@
 # App go Clima
 ### Aplicativo desenvolvido para exibir previsão metereologica
+[![NPM Version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Downloads Stats][npm-downloads]][npm-url]
 
 <img src="assets/readme/tela1.png" height="350" width="160">
 

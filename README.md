@@ -109,6 +109,7 @@ Ambas estão disponiveis no codigo do app, caso na data que você eteja rodando 
 oriento você criar a suas propias keys, segue os links
 
 [Geocoding](https://developers.google.com/maps/documentation/geocoding/get-api-key?hl=pt)
+
 [Open Weather Map](https://openweathermap.org/api)
 
 
@@ -132,10 +133,14 @@ oriento você criar a suas propias keys, segue os links
 
 ## Meta
 
-Vinicius Lima – [![twitter]](https://twitter.com/pvinfoltec) – paulo.vinicius.f.l@live.com
- 
+Vinicius Lima 
+Email:paulo.vinicius.f.l@live.com
+[![twitter]](https://twitter.com/pvinfoltec)
 
 [Git](https://github.com/othonalberto/)
+
+![GitHub followers](https://img.shields.io/github/followers/VinnyLima?tab=following?style=social)
+
 
 
 
@@ -146,4 +151,3 @@ Vinicius Lima – [![twitter]](https://twitter.com/pvinfoltec) – paulo.viniciu
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
 [twitter]:https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fpvinfoltec
-

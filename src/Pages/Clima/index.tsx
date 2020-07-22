@@ -19,13 +19,13 @@ Será muito bem valorizado:
  */
 
 import React, {useCallback, useState, useEffect} from 'react';
-import {PermissionsAndroid, View, Text} from 'react-native';
+import {PermissionsAndroid, StyleSheet, SafeAreaView} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import Icon from 'react-native-vector-icons/Feather';
 import RNRestart from 'react-native-restart';
-import Geocoder from 'react-native-geocoding';
 import Geolocation from 'react-native-geolocation-service';
+import ShimmerPlaceHolder from 'react-native-shimmer-placeholder';
 
 /**Importações Locais */
 import apiGeoc from '../../services/apiGeocodig';
@@ -51,7 +51,6 @@ import {
   Max,
 } from './style';
 
-
 interface Coordenadas {
   latitude: number;
   longitude: number;
@@ -76,23 +75,30 @@ interface DataGeocoding {
   };
 }
 
-
-
-//   console.log(weather.main.temp);
 export default function Clima() {
   const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const [userPosition, setUserPosition] = useState<Coordenadas>(Object);
   const [verifiObject, setVerifiObject] = useState(false);
-  const [weather, setWeather] = useState<Response>(Object);
-  const [address, setAddress] = useState<DataGeocoding>(Object);
   const [temp, setTemp] = useState(0);
   const [tempMin, setTempMin] = useState(0);
   const [tempMax, setTempMax] = useState(0);
   const [cidade, setCidade] = useState('');
   const [bairro, setBairro] = useState('');
+  const [background, setBackground] = useState('');
 
   moment.locale('pt-br');
   const today = moment().calendar();
+  const hours = moment().format('LT');
+
+  const hadleBackground = useCallback(() => {
+    if (hours >= '18:00' && hours <= '5:55') {
+      console.log('Noite');
+      setBackground('#737373');
+    } else if (hours >= '6:00' && hours <= '17:55') {
+      console.log('Dia');
+      setBackground('#737373');
+    }
+  }, [hours]);
 
   async function verifyLocationPermission() {
     try {
@@ -111,13 +117,13 @@ export default function Clima() {
     }
   }
   useEffect(() => {
+    hadleBackground();
     verifyLocationPermission();
 
     async function handleLocation() {
       if (hasLocationPermission) {
         await Geolocation.getCurrentPosition(
           (position) => {
-           
             setUserPosition({
               latitude: position.coords.latitude,
               longitude: position.coords.longitude,
@@ -133,9 +139,7 @@ export default function Clima() {
     }
 
     handleLocation();
-  }, [hasLocationPermission]);
-
- 
+  }, [hasLocationPermission, hadleBackground]);
 
   useEffect(() => {
     try {
@@ -144,11 +148,11 @@ export default function Clima() {
           var response = await api.get(
             `2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apikey}`,
           );
-          if (response.data) {                      
+          if (response.data) {
             setVerifiObject(true);
             setTemp(response.data.main.temp);
-            setTempMax(response.data.main.temp_max)
-            setTempMin(response.data.main.temp_min)
+            setTempMax(response.data.main.temp_max);
+            setTempMin(response.data.main.temp_min);
           }
         }
         handleWealther(userPosition.latitude, userPosition.longitude);
@@ -156,10 +160,10 @@ export default function Clima() {
         async function handleAndress(latitude: number, longitude: number) {
           var response = await apiGeoc.get(`/json?latlng=${latitude},${longitude}&key=${apikeyGeocoding}
             `);
-            
-            setBairro(response.data.results[0].address_components[2].long_name);
-            setCidade(response.data.results[0].address_components[3].long_name)
-            
+
+          setBairro(response.data.results[0].address_components[2].long_name);
+          setCidade(response.data.results[0].address_components[3].long_name);
+
           //setAddress(response.data.results);
         }
         handleAndress(userPosition.latitude, userPosition.longitude);
@@ -169,34 +173,42 @@ export default function Clima() {
     }
   }, [userPosition.latitude, userPosition.longitude]);
 
-  
+  return (
+    <SafeAreaView style={styles.container}>
+      <Reload
+        onPress={() => {
+          RNRestart.Restart();
+        }}>
+        <Icon name="refresh-cw" size={30} color="#404040" />
+      </Reload>
 
-  if (verifiObject === false) {
-    return (
-      <Container>
-        <View>
-          <Text>Carregando...</Text>
-        </View>
-      </Container>
-    );
-  } else {
-    return (
-      <Container>
-        <Reload
-          onPress={() => {
-            RNRestart.Restart();
-          }}>
-          <Icon name="refresh-cw" size={30} color="#404040" />
-        </Reload>
-        <DadosEnd>
-        <Cidade>{cidade}</Cidade>
-        <Bairro>{bairro}</Bairro>
+      <DadosEnd>
+        <ShimmerPlaceHolder
+          style={{height: 120, borderRadius: 10}}
+          autoRun={true}
+          visible={verifiObject}
+          colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
+          <Cidade>{cidade},</Cidade>
+          <Bairro>{bairro}</Bairro>
           <Day>{today}</Day>
-        </DadosEnd>
-        <TempWeather>
+        </ShimmerPlaceHolder>
+      </DadosEnd>
+
+      <TempWeather>
+        <ShimmerPlaceHolder
+          style={{height: 120, borderRadius: 10}}
+          autoRun={true}
+          visible={verifiObject}
+          colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
           <Icon name="sun" size={60} color="#404040" />
           <Temp>{(temp - 273.15).toFixed(0)}°</Temp>
-        </TempWeather>
+        </ShimmerPlaceHolder>
+      </TempWeather>
+      <ShimmerPlaceHolder
+        style={{height: 50, borderRadius: 15, marginTop: 95}}
+        autoRun={true}
+        visible={verifiObject}
+        colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
         <MinMaxTemp>
           <Max>
             {(tempMax - 273.15).toFixed(0)}°
@@ -208,7 +220,14 @@ export default function Clima() {
             <Icon name="sunset" size={20} color="#404040" />
           </Min>
         </MinMaxTemp>
-      </Container>
-    );
-  }
+      </ShimmerPlaceHolder>
+    </SafeAreaView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#ffff4d',
+  },
+});

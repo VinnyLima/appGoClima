@@ -1,9 +1,6 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.SafeAreaView`
-  flex: 1;
-  background: #ffff4d;
-`;
+export const Container = styled.SafeAreaView``;
 
 export const Reload = styled.TouchableOpacity`
   position: absolute;
@@ -13,7 +10,7 @@ export const Reload = styled.TouchableOpacity`
 
 export const DadosEnd = styled.View`
   position: relative;
-  width: 150px;
+  width: 155px;
   top: 40px;
   left: 30px;
 `;
@@ -25,7 +22,7 @@ export const Cidade = styled.Text`
 
 export const Bairro = styled.Text`
   color: #404040;
-  font-size: 18px;
+  font-size: 20px;
 `;
 
 export const Day = styled.Text`
@@ -38,6 +35,7 @@ export const Day = styled.Text`
 export const TempWeather = styled.View`
   align-content: center;
   align-items: center;
+  justify-content: center;
   margin-top: 125px;
 `;
 
@@ -57,10 +55,10 @@ export const MinMaxTemp = styled.View`
 export const Min = styled.Text`
   font-size: 30px;
   color: #404040;
-  margin-left: 30px;
+  margin-left: 20px;
 `;
 export const Max = styled.Text`
   font-size: 30px;
   color: #404040;
-  margin-right: 30px;
+  margin-right: 20px;
 `;

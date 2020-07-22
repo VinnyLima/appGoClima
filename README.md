@@ -133,9 +133,9 @@ oriento você criar a suas propias keys, segue os links
 ## Meta
 
 Vinicius Lima – [@pvinfoltec](https://twitter.com/pvinfoltec) – paulo.vinicius.f.l@live.com
+[![twitter]]
 
-
-[https://github.com/yourname/github-link](https://github.com/othonalberto/)
+[VinnyLima](https://github.com/othonalberto/)
 
 
 
@@ -145,4 +145,5 @@ Vinicius Lima – [@pvinfoltec](https://twitter.com/pvinfoltec) – paulo.vinici
 [npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
 [travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/seunome/seuprojeto/wiki
+[twitter]:https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Ftwitter.com%2Fpvinfoltec
+

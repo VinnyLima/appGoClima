@@ -18,8 +18,11 @@ Será muito bem valorizado:
 
  */
 
+ /**
+  * Importações Globais
+  */
 import React, {useCallback, useState, useEffect} from 'react';
-import {PermissionsAndroid, StyleSheet, SafeAreaView} from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 import moment from 'moment';
 import 'moment/locale/pt-br';
 import Icon from 'react-native-vector-icons/Feather';
@@ -32,13 +35,15 @@ import apiGeoc from '../../services/apiGeocodig';
 import api from '../../services/api';
 
 const apikey = 'd55143bf18a6deb7e90c8f3a26783805';
+
 const apikeyGeocoding = 'AIzaSyD_SyO_idxGehdhhaPfaMr3ByQyVflaVd0';
 
 /**
  * Estilização
  */
 import {
-  Container,
+  ContainerSun,
+  ContainerMoon,
   Reload,
   Cidade,
   Bairro,
@@ -56,23 +61,15 @@ interface Coordenadas {
   longitude: number;
 }
 
-interface Response {
-  name: string;
-  main: {
-    feels_like: number;
-    humidity: number;
-    pressure: number;
-    temp: number;
-    temp_max: number;
-    temp_min: number;
-  };
+interface AddressData{
+  cidade: string;
+  bairro: string;
 }
 
-interface DataGeocoding {
-  plus_code: {
-    compound_code: string;
-    global_code: string;
-  };
+interface WeatherData{
+  temp: number,
+  tempMax: number,
+  tempMin: number,
 }
 
 export default function Clima() {
@@ -82,23 +79,26 @@ export default function Clima() {
   const [temp, setTemp] = useState(0);
   const [tempMin, setTempMin] = useState(0);
   const [tempMax, setTempMax] = useState(0);
-  const [cidade, setCidade] = useState('');
-  const [bairro, setBairro] = useState('');
+  const [address, setAddress] = useState<AddressData>({} as AddressData);
+  const [weather, setWeather] = useState<WeatherData>({} as WeatherData);
   const [background, setBackground] = useState('');
 
   moment.locale('pt-br');
   const today = moment().calendar();
+  
+
+  /**Tentativa de mudar a cor do background quando chegasse a noite */
   const hours = moment().format('LT');
 
   const hadleBackground = useCallback(() => {
-    if (hours >= '18:00' && hours <= '5:55') {
-      console.log('Noite');
+    if (hours >= '18:00' && hours <= '5:55') {      
       setBackground('#737373');
-    } else if (hours >= '6:00' && hours <= '17:55') {
-      console.log('Dia');
+    } else if (hours >= '6:00' && hours <= '17:55') {      
       setBackground('#737373');
     }
   }, [hours]);
+
+  /**Verificação se o usurio permitiu que o app acese sua localização  */
 
   async function verifyLocationPermission() {
     try {
@@ -116,6 +116,11 @@ export default function Clima() {
       console.warn(err);
     }
   }
+
+  /**
+   * Aqui obtemos as coordenadas de onde o aparelho se encontra
+   * 
+   */
   useEffect(() => {
     hadleBackground();
     verifyLocationPermission();
@@ -141,6 +146,15 @@ export default function Clima() {
     handleLocation();
   }, [hasLocationPermission, hadleBackground]);
 
+  /**
+   * Neste Hook, obtemos as temperaturas em kelvin
+   * na exibição e feita a conversão da mesma para Celcius
+   * Formula: C = (K - 273.15).
+   * 
+   * Aqui tambem obtemos o endereço do usuario pela api do
+   * Google, a geocodig.
+   */
+
   useEffect(() => {
     try {
       if (userPosition.latitude && userPosition.longitude) {
@@ -149,10 +163,12 @@ export default function Clima() {
             `2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apikey}`,
           );
           if (response.data) {
-            setVerifiObject(true);
-            setTemp(response.data.main.temp);
-            setTempMax(response.data.main.temp_max);
-            setTempMin(response.data.main.temp_min);
+            setVerifiObject(true);            
+            setWeather({
+              temp: response.data.main.temp,
+              tempMax: response.data.main.temp_max,
+              tempMin: response.data.main.temp_min,
+            })
           }
         }
         handleWealther(userPosition.latitude, userPosition.longitude);
@@ -160,11 +176,10 @@ export default function Clima() {
         async function handleAndress(latitude: number, longitude: number) {
           var response = await apiGeoc.get(`/json?latlng=${latitude},${longitude}&key=${apikeyGeocoding}
             `);
-
-          setBairro(response.data.results[0].address_components[2].long_name);
-          setCidade(response.data.results[0].address_components[3].long_name);
-
-          //setAddress(response.data.results);
+            setAddress({
+              cidade: response.data.results[0].address_components[3].long_name,
+              bairro: response.data.results[0].address_components[2].long_name,
+            })          
         }
         handleAndress(userPosition.latitude, userPosition.longitude);
       }
@@ -174,7 +189,7 @@ export default function Clima() {
   }, [userPosition.latitude, userPosition.longitude]);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ContainerSun>
       <Reload
         onPress={() => {
           RNRestart.Restart();
@@ -188,8 +203,8 @@ export default function Clima() {
           autoRun={true}
           visible={verifiObject}
           colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
-          <Cidade>{cidade},</Cidade>
-          <Bairro>{bairro}</Bairro>
+          <Cidade>{address.cidade},</Cidade>
+          <Bairro>{address.bairro}</Bairro>
           <Day>{today}</Day>
         </ShimmerPlaceHolder>
       </DadosEnd>
@@ -201,33 +216,26 @@ export default function Clima() {
           visible={verifiObject}
           colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
           <Icon name="sun" size={60} color="#404040" />
-          <Temp>{(temp - 273.15).toFixed(0)}°</Temp>
+          <Temp>{(weather.temp - 273.15).toFixed(0)}°</Temp>
         </ShimmerPlaceHolder>
       </TempWeather>
       <ShimmerPlaceHolder
-        style={{height: 50, borderRadius: 15, marginTop: 95}}
+        style={{height: 50, borderRadius: 15, marginTop: 140}}
         autoRun={true}
         visible={verifiObject}
         colorShimmer={['#ffff4d', '#ffffb3', '#ffff1a']}>
         <MinMaxTemp>
           <Max>
-            {(tempMax - 273.15).toFixed(0)}°
+            {(weather.tempMax - 273.15).toFixed(0)}°
             <Icon name="sunrise" size={20} color="#404040" />
           </Max>
-
           <Min>
-            {(tempMin - 273.15).toFixed(0)}°
+            {(weather.tempMin - 273.15).toFixed(0)}°
             <Icon name="sunset" size={20} color="#404040" />
           </Min>
         </MinMaxTemp>
       </ShimmerPlaceHolder>
-    </SafeAreaView>
+    </ContainerSun>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#ffff4d',
-  },
-});

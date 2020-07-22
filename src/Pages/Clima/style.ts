@@ -1,6 +1,15 @@
 import styled from 'styled-components/native';
 
-export const Container = styled.SafeAreaView``;
+export const ContainerSun = styled.SafeAreaView`
+flex:1;
+background: #ffff4d; 
+`;
+
+/**Tentativa de mudar a cor do background quando chegasse a noite */
+export const ContainerMoon = styled.SafeAreaView`
+flex:1;
+background: #000000; 
+`;
 
 export const Reload = styled.TouchableOpacity`
   position: absolute;
@@ -33,6 +42,7 @@ export const Day = styled.Text`
 `;
 
 export const TempWeather = styled.View`
+flex-direction: column;
   align-content: center;
   align-items: center;
   justify-content: center;

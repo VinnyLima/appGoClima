@@ -131,17 +131,18 @@ oriento você criar a suas propias keys, segue os links
     * Coletando libs para desenvolvimento
     * Escolhendo melhor template 
 
-## Meta
+## Developer
 
 Vinicius Lima
 
 Email:paulo.vinicius.f.l@live.com
 
-[Git](https://github.com/othonalberto/)
+[Git](https://github.com/VinnyLima)
+![GitHub followers](https://img.shields.io/github/followers/VinnyLima?tab=following?style=social)
 
 [![twitter]](https://twitter.com/pvinfoltec)
 
-![GitHub followers](https://img.shields.io/github/followers/VinnyLima?tab=following?style=social)
+
 
 
 

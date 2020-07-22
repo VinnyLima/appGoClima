@@ -133,11 +133,13 @@ oriento você criar a suas propias keys, segue os links
 
 ## Meta
 
-Vinicius Lima 
+Vinicius Lima
+
 Email:paulo.vinicius.f.l@live.com
-[![twitter]](https://twitter.com/pvinfoltec)
 
 [Git](https://github.com/othonalberto/)
+
+[![twitter]](https://twitter.com/pvinfoltec)
 
 ![GitHub followers](https://img.shields.io/github/followers/VinnyLima?tab=following?style=social)
 

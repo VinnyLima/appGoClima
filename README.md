@@ -1,7 +1,9 @@
 # Go Clima
 > Aplicativo desenvolvido para obter a localização atual do usuario via geolocalização e exibir dados climaticos.
 
-
+[![NPM Version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Downloads Stats][npm-downloads]][npm-url]
 
 O App tem como como objetivo auxiliar o usuario no clima da região onde ele se encontra, 
 a ideia proposta seria de obter a localização geografica de onde o usuario estaria localizado e
@@ -82,7 +84,7 @@ async function handleAndress(latitude: number, longitude: number) {
               cidade: response.data.results[0].address_components[3].long_name,
               bairro: response.data.results[0].address_components[2].long_name,
             })          
-        }
+        }SeuNome
         handleAndress(userPosition.latitude, userPosition.longitude);
 
 const apikey = 'xxxxxxxxxxxxxxxxxxxxxxxx';
@@ -130,4 +132,17 @@ oriento você criar a suas propias keys, segue os links
 
 ## Meta
 
+Vinicius Lima – [@pvinfoltec](https://twitter.com/pvinfoltec) – paulo.vinicius.f.l@live.com
 
+
+[https://github.com/yourname/github-link](https://github.com/othonalberto/)
+
+
+
+
+[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/datadog-metrics
+[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
+[wiki]: https://github.com/seunome/seuprojeto/wiki

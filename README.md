@@ -132,10 +132,10 @@ oriento você criar a suas propias keys, segue os links
 
 ## Meta
 
-Vinicius Lima – [twitter](https://twitter.com/pvinfoltec) – paulo.vinicius.f.l@live.com
+Vinicius Lima – [![twitter]](https://twitter.com/pvinfoltec) – paulo.vinicius.f.l@live.com
  
 
-[VinnyLima](https://github.com/othonalberto/)
+[Git](https://github.com/othonalberto/)
 
 
 

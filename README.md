@@ -3,14 +3,13 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
 
 O App tem como como objetivo auxiliar o usuario no clima da região onde ele se encontra, 
 a ideia proposta seria de obter a localização geografica de onde o usuario estaria localizado e
 com esse dados exibir o endereço e as condições climaticas de onde o mesmo se encontra
  e um botão para atualizar a aplicação caso ele mude de região.
 
-<img src="assets/readme/appGoClima.png" height="350" width="160">
+<img src="assets/readme/appGoClima.png" height="350" width="170">
 
 ## Instalação e configurações
 

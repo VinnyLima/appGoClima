@@ -8,9 +8,9 @@ a ideia proposta seria de obter a localização geografica de onde o usuario est
 com esse dados exibir o endereço e as condições climaticas de onde o mesmo se encontra
  e um botão para atualizar a aplicação caso ele mude de região.
 
-<img src="assets/readme/tela1.png" height="350" width="160">
+<img src="assets/readme/appGoClima.png" height="350" width="160">
 
-## Instalação
+## Instalação e configurações
 
 Android:
 
@@ -38,7 +38,7 @@ yarn install
 npm install
 ```
 
-Para realizar a criação do aplicativo no emulador
+Para realizar a criação do aplicativo no emulador ou dispositivo fisico(Smarthphone)
 ```sh
 # YARN
 yarn android
@@ -54,39 +54,79 @@ npm ios
 react-native run-android
 react-native run-ios
 ```
-Para executar o app no emulador;
+Para executar o app no emulador ou dispositivo fisico(Smarthphone);
+```sh
+# YARN
+yarn start
+
+#NPM
+npm start
+
+#Direct
+react-native start
+```
 
 
+## Usando
 
-## Exemplo de uso
-
-Alguns exemplos interessantes e úteis sobre como seu projeto pode ser utilizado. Adicione blocos de códigos e, se necessário, screenshots.
-
-_Para mais exemplos, consulte a [Wiki][wiki]._ 
-
-## Configuração para Desenvolvimento
-
-Descreva como instalar todas as dependências para desenvolvimento e como rodar um test-suite automatizado de algum tipo. Se necessário, faça isso para múltiplas plataformas.
+O Aplicativo necessita de duas keys do google e da Open Weather Map para obter a localização por endereço e a codições climaticas
+como pode ser observado no codigo abaixo;
 
 ```sh
-make install
-npm test
+const apikeyGeocoding = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX';
+
+async function handleAndress(latitude: number, longitude: number) {
+          var response = await apiGeoc.get(`/json?latlng=${latitude},${longitude}&key=${apikeyGeocoding}
+            `);
+            setAddress({
+              cidade: response.data.results[0].address_components[3].long_name,
+              bairro: response.data.results[0].address_components[2].long_name,
+            })          
+        }
+        handleAndress(userPosition.latitude, userPosition.longitude);
+
+const apikey = 'xxxxxxxxxxxxxxxxxxxxxxxx';
+
+         async function handleWealther(latitude: number, longitude: number) {
+          var response = await api.get(
+            `2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apikey}`,
+          );
+          if (response.data) {
+            setVerifiObject(true);            
+            setWeather({
+              temp: response.data.main.temp,
+              tempMax: response.data.main.temp_max,
+              tempMin: response.data.main.temp_min,
+            })
+          }
+        }
+        handleWealther(userPosition.latitude, userPosition.longitude);
+
 ```
+Ambas estão disponiveis no codigo do app, caso na data que você eteja rodando esse app elas podem não estar mais disponiveis
+oriento você criar a suas propias keys, segue os links
+
+[Geocoding](https://developers.google.com/maps/documentation/geocoding/get-api-key?hl=pt)
+[Open Weather Map](https://openweathermap.org/api)
+
 
 ## Histórico de lançamentos
 
+* 0.3.1
+    * ADD: Adicionando  componente `<ShimmerPlaceHolder>` para carregamento do app enquanto os dados são capturado nas apis.
+* 0.2.5
+    * MUDANÇA: Removendo interface  `WealtherDatas` interface estava errada e calsando erro no carregamento do app
+    * MUDANÇA: Alterando a forma de inserção dos dados nos estados de forma asincrona, tornando as interfaces criadas funcionais.
 * 0.2.1
-    * MUDANÇA: Atualização de docs (código do módulo permanece inalterado)
-* 0.2.0
-    * MUDANÇA: Remove `setDefaultXYZ()`
-    * ADD: Adiciona `init()`
-* 0.1.1
-    * CONSERTADO: Crash quando chama `baz()` (Obrigado @NomeDoContribuidorGeneroso!)
-* 0.1.0
-    * O primeiro lançamento adequado
-    * MUDANÇA: Renomeia `foo()` para `bar()`
+    * ADD: Criação da função `handleWealther()` responsavel por capturar dados climaticos
+    * ADD: Criação da função `handleAndress(latitude: number, longitude: number)` responsavel por obter o endereço do usuario 
+* 0.1.9    
+    * Criação da função `handleLocation()` 
+    * Desenvolvimento da mesma para obter a geolocalização
+    * Criando template para receber dados vindos das apis
 * 0.0.1
-    * Trabalho em andamento
+    * Coletando libs para desenvolvimento
+    * Escolhendo melhor template 
 
 ## Meta
 
